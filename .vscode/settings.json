@@ -1,0 +1,13 @@
+{
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true
+    },
+    "prettier.tabWidth": 4,
+    "[javascriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "jest.runMode": "on-demand",
+    "jest.shell": "bash",
+    "jest.jestCommandLine": "npm test --"
+}
