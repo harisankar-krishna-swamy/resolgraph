@@ -1,10 +1,9 @@
-import { useEffect, useState } from "react";
-import Graph from "graphology";
-import { SigmaContainer, useLoadGraph } from "@react-sigma/core";
-import "@react-sigma/core/lib/react-sigma.min.css";
-import { useRandom } from "./common/useRandom";
+import { useState } from "react";
+import { SigmaContainer } from "@react-sigma/core";
 import SidePanel from "./SidePanel";
-import { v4 as uuidv4 } from "uuid";
+import { GraphLoader } from "./GraphLoader";
+import "@react-sigma/core/lib/react-sigma.min.css";
+import { graphNodes } from "./data";
 
 const sigmaStyle = {
     height: "800px",
@@ -12,55 +11,27 @@ const sigmaStyle = {
     backgroundColor: "lightgray",
 };
 
-// Component that load the graph
-export const LoadGraph = ({ graphData }) => {
-    const loadGraph = useLoadGraph();
-
-    useEffect(() => {
-        const graph = new Graph();
-        graphData.forEach((node) => {
-            graph.addNode(uuidv4(), node);
-        });
-        loadGraph(graph);
-    }, [graphData, loadGraph]);
-
-    return null;
-};
-
 // Component that display the graph
 export const DisplayGraph = () => {
-    const { faker } = useRandom();
-    const [nodes, setNodes] = useState([
-        {
-            x: Math.random() * 10 + 50,
-            y: Math.random() * 10 + 50,
-            size: 15,
-            label: faker.person.fullName(),
-            color: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
-        },
-        {
-            x: Math.random() * 10 + 50,
-            y: Math.random() * 10 + 50,
-            size: 15,
-            label: faker.person.fullName(),
-            color: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
-        },
-    ]);
+    const [nodes, setNodes] = useState(graphNodes);
 
     const onNewNode = (data) => {
-        console.log(data);
         setNodes([...nodes, data]);
+    };
+
+    const onClear = (data) => {
+        setNodes([]);
     };
 
     return (
         <div className="row m-3">
             <div className="col-8">
                 <SigmaContainer style={sigmaStyle}>
-                    <LoadGraph graphData={nodes} />
+                    <GraphLoader graphData={nodes} />
                 </SigmaContainer>
             </div>
             <div className="col-4">
-                <SidePanel handleNewNode={onNewNode} />
+                <SidePanel handleNewNode={onNewNode} handleClear={onClear} />
             </div>
         </div>
     );

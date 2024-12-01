@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const SidePanel = ({ handleNewNode }) => {
+const SidePanel = ({ handleNewNode, handleClear }) => {
     const [nodeLabel, setNodeLabel] = useState("");
 
     const submitNewNode = (e) => {
@@ -18,27 +18,42 @@ const SidePanel = ({ handleNewNode }) => {
 
     return (
         <div className="card">
-            <div className="card-header">Graph</div>
+            <div className="card-header">Graph options</div>
             <div className="card-body">
-                <form onSubmit={submitNewNode}>
-                    <div className="form-floating mt-2">
-                        <input
-                            id="node-label"
-                            type="text"
-                            className="form-control"
-                            value={nodeLabel}
-                            onChange={(e) => setNodeLabel(e.target.value)}
-                            required
-                        />
-                        <label htmlFor="node-label">Node Label</label>
-                    </div>
+                <div className="row">
+                    <form onSubmit={submitNewNode}>
+                        <div className="row">
+                            <div className="col-8">
+                                <input
+                                    type="text"
+                                    placeholder="Label"
+                                    className="form-control"
+                                    value={nodeLabel}
+                                    onChange={(e) =>
+                                        setNodeLabel(e.target.value)
+                                    }
+                                    required
+                                />
+                            </div>
+                            <div className="col-4">
+                                <button
+                                    type="submit"
+                                    className="btn btn-md btn-primary"
+                                >
+                                    Add Node
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div className="row mt-4">
                     <button
-                        type="submit"
-                        className="btn btn-lg btn-primary mt-2"
+                        className="btn btn-md btn-danger"
+                        onClick={handleClear}
                     >
-                        Add Node
+                        Clear
                     </button>
-                </form>
+                </div>
             </div>
         </div>
     );
