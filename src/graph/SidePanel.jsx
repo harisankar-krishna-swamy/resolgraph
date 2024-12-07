@@ -1,19 +1,21 @@
 import React, { useState } from "react";
 
-const SidePanel = ({ handleNewNode, handleClear }) => {
+const SidePanel = ({ handleNewNode, handleNewEdge, handleClear }) => {
     const [nodeLabel, setNodeLabel] = useState("");
+    const [sourceLabel, setSourceLabel] = useState("");
+    const [targetLabel, setTargetLabel] = useState("");
 
     const submitNewNode = (e) => {
         e.preventDefault();
-        const newNode = {
-            x: Math.random() * 10 + 50,
-            y: Math.random() * 10 + 50,
-            size: 15,
-            label: nodeLabel,
-            color: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
-        };
-        handleNewNode(newNode);
+        handleNewNode(nodeLabel);
         setNodeLabel("");
+    };
+
+    const submitNewEdge = (e) => {
+        e.preventDefault();
+        handleNewEdge(sourceLabel, targetLabel);
+        setSourceLabel("");
+        setTargetLabel("");
     };
 
     return (
@@ -41,6 +43,44 @@ const SidePanel = ({ handleNewNode, handleClear }) => {
                                     className="btn btn-md btn-primary"
                                 >
                                     Add Node
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div className="row mt-4">
+                    <form onSubmit={submitNewEdge}>
+                        <div className="row">
+                            <div className="col-4">
+                                <input
+                                    type="text"
+                                    placeholder="Source"
+                                    className="form-control"
+                                    value={sourceLabel}
+                                    onChange={(e) =>
+                                        setSourceLabel(e.target.value)
+                                    }
+                                    required
+                                />
+                            </div>
+                            <div className="col-4">
+                                <input
+                                    type="text"
+                                    placeholder="Target"
+                                    className="form-control"
+                                    value={targetLabel}
+                                    onChange={(e) =>
+                                        setTargetLabel(e.target.value)
+                                    }
+                                    required
+                                />
+                            </div>
+                            <div className="col-4">
+                                <button
+                                    type="submit"
+                                    className="btn btn-md btn-primary"
+                                >
+                                    Add Edge
                                 </button>
                             </div>
                         </div>

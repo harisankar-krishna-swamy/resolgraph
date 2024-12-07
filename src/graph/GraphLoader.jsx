@@ -1,20 +1,22 @@
 import { useLoadGraph } from "@react-sigma/core";
 import Graph from "graphology";
 import { useEffect } from "react";
-import { v4 as uuidv4 } from "uuid";
 
 // Component that load the graph
 
-export const GraphLoader = ({ graphData }) => {
+export const GraphLoader = ({ nodes, edges }) => {
     const loadGraph = useLoadGraph();
 
     useEffect(() => {
         const graph = new Graph();
-        graphData.forEach((node) => {
-            graph.addNode(uuidv4(), node);
+        nodes.forEach((node) => {
+            graph.addNode(node.key, node);
+        });
+        edges.forEach(([source, target]) => {
+            graph.addEdge(source, target, { size: 2, color: "black" });
         });
         loadGraph(graph);
-    }, [graphData, loadGraph]);
+    }, [nodes, edges, loadGraph]);
 
     return null;
 };
