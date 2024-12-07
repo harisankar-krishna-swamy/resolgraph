@@ -17,6 +17,18 @@ export const DisplayGraph = () => {
     const emptyGraph = { nodes: [], edges: [] };
     const [graphData, setGraphData] = useState(data);
 
+    const onDeleteNode = (nodeLabel) => {
+        const node = graphData.nodes.find((n) => n.label === nodeLabel);
+        if (!node) return;
+
+        const nodes = graphData.nodes.filter((n) => n.label !== nodeLabel);
+        const edges = graphData.edges.filter(
+            ([s, t]) => s !== node.key && t !== node.key
+        );
+
+        setGraphData({ nodes, edges });
+    };
+
     const onNewNode = (nodeLabel) => {
         const exists = graphData.nodes.find((n) => n.label === nodeLabel);
         if (exists) return;
@@ -63,6 +75,7 @@ export const DisplayGraph = () => {
                 <SidePanel
                     handleNewNode={onNewNode}
                     handleNewEdge={onNewEdge}
+                    handleDeleteNode={onDeleteNode}
                     handleClear={onClear}
                 />
             </div>

@@ -1,13 +1,19 @@
 import React, { useState } from "react";
 
-const SidePanel = ({ handleNewNode, handleNewEdge, handleClear }) => {
-    const [nodeLabel, setNodeLabel] = useState("");
+const SidePanel = ({
+    handleNewNode,
+    handleNewEdge,
+    handleDeleteNode,
+    handleClear,
+}) => {
+    const [newLabel, setNodeLabel] = useState("");
     const [sourceLabel, setSourceLabel] = useState("");
     const [targetLabel, setTargetLabel] = useState("");
+    const [deleteLabel, setDeleteLabel] = useState("");
 
     const submitNewNode = (e) => {
         e.preventDefault();
-        handleNewNode(nodeLabel);
+        handleNewNode(newLabel);
         setNodeLabel("");
     };
 
@@ -16,6 +22,12 @@ const SidePanel = ({ handleNewNode, handleNewEdge, handleClear }) => {
         handleNewEdge(sourceLabel, targetLabel);
         setSourceLabel("");
         setTargetLabel("");
+    };
+
+    const submitDeleteNode = (e) => {
+        e.preventDefault();
+        handleDeleteNode(deleteLabel);
+        setDeleteLabel("");
     };
 
     return (
@@ -30,7 +42,7 @@ const SidePanel = ({ handleNewNode, handleNewEdge, handleClear }) => {
                                     type="text"
                                     placeholder="Label"
                                     className="form-control"
-                                    value={nodeLabel}
+                                    value={newLabel}
                                     onChange={(e) =>
                                         setNodeLabel(e.target.value)
                                     }
@@ -43,6 +55,32 @@ const SidePanel = ({ handleNewNode, handleNewEdge, handleClear }) => {
                                     className="btn btn-md btn-primary"
                                 >
                                     Add Node
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div className="row mt-4">
+                    <form onSubmit={submitDeleteNode}>
+                        <div className="row">
+                            <div className="col-4">
+                                <input
+                                    type="text"
+                                    placeholder="Label"
+                                    className="form-control"
+                                    value={deleteLabel}
+                                    onChange={(e) =>
+                                        setDeleteLabel(e.target.value)
+                                    }
+                                    required
+                                />
+                            </div>
+                            <div className="col-4">
+                                <button
+                                    type="submit"
+                                    className="btn btn-md btn-warning"
+                                >
+                                    Delete Node
                                 </button>
                             </div>
                         </div>

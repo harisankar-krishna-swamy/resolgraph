@@ -6,7 +6,6 @@ import { useEffect } from "react";
 
 export const GraphLoader = ({ nodes, edges }) => {
     const loadGraph = useLoadGraph();
-
     useEffect(() => {
         const graph = new Graph();
         nodes.forEach((node) => {
