@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useEffect, useMemo } from "react";
 import { SigmaContainer } from "@react-sigma/core";
 import SidePanel from "./SidePanel";
-import { GraphLoader } from "./GraphLoader";
 import { v4 as uuidv4 } from "uuid";
 import "@react-sigma/core/lib/react-sigma.min.css";
+import Graph from "graphology";
 import { data } from "./data";
 
 const sigmaStyle = {
@@ -14,62 +14,70 @@ const sigmaStyle = {
 
 // Component that display the graph
 export const DisplayGraph = () => {
-    const emptyGraph = { nodes: [], edges: [] };
-    const [graphData, setGraphData] = useState(data);
+    const graph = useMemo(() => new Graph(), []);
+
+    useEffect(() => {
+        graph.clear();
+        const { nodes, edges } = data;
+        nodes.forEach((node) => {
+            graph.addNode(node.key, { ...node });
+        });
+        edges.forEach(([source, target, attrs]) => {
+            graph.addEdge(source, target, {
+                size: 2,
+                color: "black",
+            });
+        });
+    }, [graph]);
+
+    const nodeExists = (label) =>
+        graph.nodes().find((l) => l === label) ? true : false;
+
+    const edgeExists = (sourceLabel, targetLabel) =>
+        graph.edges(sourceLabel, targetLabel).length ? true : false;
 
     const onDeleteNode = (nodeLabel) => {
-        const node = graphData.nodes.find((n) => n.label === nodeLabel);
-        if (!node) return;
+        if (!nodeLabel || !nodeExists(nodeLabel)) return;
 
-        const nodes = graphData.nodes.filter((n) => n.label !== nodeLabel);
-        const edges = graphData.edges.filter(
-            ([s, t]) => s !== node.key && t !== node.key
-        );
-
-        setGraphData({ nodes, edges });
+        graph.dropNode(nodeLabel);
     };
 
     const onNewNode = (nodeLabel) => {
-        const exists = graphData.nodes.find((n) => n.label === nodeLabel);
-        if (exists) return;
+        if (nodeExists(nodeLabel)) return;
 
-        const newNode = {
+        graph.addNode(nodeLabel, {
             key: uuidv4(),
             x: Math.random() * 10 + 50,
             y: Math.random() * 10 + 50,
-            size: 20,
+            size: 15,
             label: nodeLabel,
             color: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
-        };
-
-        setGraphData({ ...graphData, nodes: [...graphData.nodes, newNode] });
+        });
     };
 
     const onNewEdge = (source, target) => {
-        const sourceNode = graphData.nodes.find((n) => n.label === source);
-        const targetNode = graphData.nodes.find((n) => n.label === target);
-        if (!sourceNode || !targetNode) return;
+        if (
+            !nodeExists(source) ||
+            !nodeExists(target) ||
+            edgeExists(source, target)
+        )
+            return;
 
-        const exists = graphData.edges.find(
-            ([s, t]) => s === sourceNode.key && t === targetNode.key
-        );
-        if (exists) return;
-
-        const newEdge = [sourceNode.key, targetNode.key];
-
-        setGraphData({ ...graphData, edges: [...graphData.edges, newEdge] });
+        graph.addEdge(source, target, { size: 2, color: "black" });
     };
 
     const onClear = () => {
-        setGraphData(emptyGraph);
+        graph.clear();
     };
 
     return (
         <div className="row m-3">
             <div className="col-8">
-                <SigmaContainer style={sigmaStyle}>
-                    <GraphLoader {...graphData} />
-                </SigmaContainer>
+                <SigmaContainer
+                    graph={graph}
+                    style={sigmaStyle}
+                    className="react-sigma"
+                ></SigmaContainer>
             </div>
             <div className="col-4">
                 <SidePanel
