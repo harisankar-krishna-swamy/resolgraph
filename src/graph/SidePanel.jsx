@@ -18,18 +18,6 @@ const SidePanel = ({
         setNodeLabel("");
     };
 
-    const submitNewEdge = () => {
-        handleNewEdge(sourceLabel, targetLabel);
-        setSourceLabel("");
-        setTargetLabel("");
-    };
-
-    const submitDropEdge = () => {
-        handleDropEdge(sourceLabel, targetLabel);
-        setSourceLabel("");
-        setTargetLabel("");
-    };
-
     const submitDeleteNode = (e) => {
         e.preventDefault();
         handleDeleteNode(deleteLabel);

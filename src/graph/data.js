@@ -12,7 +12,7 @@ for (let i = 0; i < 5; i++) {
         color: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
     };
 }
-console.log(nodes);
+
 const edges = [
     ["1", "2"],
     ["2", "3"],

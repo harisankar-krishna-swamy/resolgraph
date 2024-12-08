@@ -22,7 +22,7 @@ export const DisplayGraph = () => {
         nodes.forEach((node) => {
             graph.addNode(node.key, { ...node });
         });
-        edges.forEach(([source, target, attrs]) => {
+        edges.forEach(([source, target]) => {
             graph.addEdge(source, target, {
                 size: 2,
                 color: "black",
