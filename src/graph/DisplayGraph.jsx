@@ -66,6 +66,17 @@ export const DisplayGraph = () => {
         graph.addEdge(source, target, { size: 2, color: "black" });
     };
 
+    const onDropEdge = (source, target) => {
+        if (
+            !nodeExists(source) ||
+            !nodeExists(target) ||
+            !edgeExists(source, target)
+        )
+            return;
+
+        graph.dropEdge(source, target);
+    };
+
     const onClear = () => {
         graph.clear();
     };
@@ -83,6 +94,7 @@ export const DisplayGraph = () => {
                 <SidePanel
                     handleNewNode={onNewNode}
                     handleNewEdge={onNewEdge}
+                    handleDropEdge={onDropEdge}
                     handleDeleteNode={onDeleteNode}
                     handleClear={onClear}
                 />

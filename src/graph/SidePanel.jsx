@@ -3,6 +3,7 @@ import React, { useState } from "react";
 const SidePanel = ({
     handleNewNode,
     handleNewEdge,
+    handleDropEdge,
     handleDeleteNode,
     handleClear,
 }) => {
@@ -17,9 +18,14 @@ const SidePanel = ({
         setNodeLabel("");
     };
 
-    const submitNewEdge = (e) => {
-        e.preventDefault();
+    const submitNewEdge = () => {
         handleNewEdge(sourceLabel, targetLabel);
+        setSourceLabel("");
+        setTargetLabel("");
+    };
+
+    const submitDropEdge = () => {
+        handleDropEdge(sourceLabel, targetLabel);
         setSourceLabel("");
         setTargetLabel("");
     };
@@ -87,42 +93,50 @@ const SidePanel = ({
                     </form>
                 </div>
                 <div className="row mt-4">
-                    <form onSubmit={submitNewEdge}>
-                        <div className="row">
-                            <div className="col-4">
-                                <input
-                                    type="text"
-                                    placeholder="Source"
-                                    className="form-control"
-                                    value={sourceLabel}
-                                    onChange={(e) =>
-                                        setSourceLabel(e.target.value)
-                                    }
-                                    required
-                                />
-                            </div>
-                            <div className="col-4">
-                                <input
-                                    type="text"
-                                    placeholder="Target"
-                                    className="form-control"
-                                    value={targetLabel}
-                                    onChange={(e) =>
-                                        setTargetLabel(e.target.value)
-                                    }
-                                    required
-                                />
-                            </div>
-                            <div className="col-4">
-                                <button
-                                    type="submit"
-                                    className="btn btn-md btn-primary"
-                                >
-                                    Add Edge
-                                </button>
-                            </div>
+                    <div className="row">
+                        <div className="col-3">
+                            <input
+                                type="text"
+                                placeholder="Source"
+                                className="form-control"
+                                value={sourceLabel}
+                                onChange={(e) => setSourceLabel(e.target.value)}
+                                required
+                            />
                         </div>
-                    </form>
+                        <div className="col-3">
+                            <input
+                                type="text"
+                                placeholder="Target"
+                                className="form-control"
+                                value={targetLabel}
+                                onChange={(e) => setTargetLabel(e.target.value)}
+                                required
+                            />
+                        </div>
+                        <div className="col-3">
+                            <button
+                                type="submit"
+                                className="btn btn-md btn-primary"
+                                onClick={() =>
+                                    handleNewEdge(sourceLabel, targetLabel)
+                                }
+                            >
+                                Add Edge
+                            </button>
+                        </div>
+                        <div className="col-3">
+                            <button
+                                type="submit"
+                                className="btn btn-md btn-warning"
+                                onClick={() =>
+                                    handleDropEdge(sourceLabel, targetLabel)
+                                }
+                            >
+                                Drop Edge
+                            </button>
+                        </div>
+                    </div>
                 </div>
                 <div className="row mt-4">
                     <button
