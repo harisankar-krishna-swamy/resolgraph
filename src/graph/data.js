@@ -14,7 +14,7 @@ for (let i = 0; i < 5; i++) {
 }
 console.log(nodes);
 const edges = [
-    ["1", "2", { type: "KNOWS" }],
+    ["1", "2"],
     ["2", "3"],
     ["4", "2"],
     ["5", "2"],
