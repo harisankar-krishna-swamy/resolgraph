@@ -1,4 +1,4 @@
-const nodeSize = 15;
+const nodeSize = 18;
 const clusters = ["Solar", "Andromeda"];
 const nodes = [];
 for (let i = 0; i < 5; i++) {

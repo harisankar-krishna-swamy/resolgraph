@@ -1,10 +1,12 @@
 import { useEffect, useMemo } from "react";
 import { SigmaContainer } from "@react-sigma/core";
+import { createNodeImageProgram } from "@sigma/node-image";
 import SidePanel from "./SidePanel";
 import { v4 as uuidv4 } from "uuid";
 import "@react-sigma/core/lib/react-sigma.min.css";
 import Graph from "graphology";
 import { data } from "./data";
+import GraphEvents from "./GraphEvents";
 
 const sigmaStyle = {
     height: "800px",
@@ -15,12 +17,29 @@ const sigmaStyle = {
 // Component that display the graph
 export const DisplayGraph = () => {
     const graph = useMemo(() => new Graph(), []);
+    const sigmaSettings = useMemo(
+        () => ({
+            nodeProgramClasses: {
+                image: createNodeImageProgram({
+                    size: { mode: "force", value: 256 },
+                }),
+            },
+            defaultNodeType: "image",
+            defaultEdgeType: "arrow",
+            labelDensity: 0.07,
+            labelGridCellSize: 60,
+            labelRenderedSizeThreshold: 15,
+            labelFont: "Lato, sans-serif",
+            zIndex: true,
+        }),
+        []
+    );
 
     useEffect(() => {
         graph.clear();
         const { nodes, edges } = data;
         nodes.forEach((node) => {
-            graph.addNode(node.key, { ...node });
+            graph.addNode(node.key, { ...node, hightlighted: true });
         });
         edges.forEach(([source, target]) => {
             graph.addEdge(source, target, {
@@ -87,8 +106,11 @@ export const DisplayGraph = () => {
                 <SigmaContainer
                     graph={graph}
                     style={sigmaStyle}
+                    settings={sigmaSettings}
                     className="react-sigma"
-                ></SigmaContainer>
+                >
+                    <GraphEvents />
+                </SigmaContainer>
             </div>
             <div className="col-4">
                 <SidePanel
