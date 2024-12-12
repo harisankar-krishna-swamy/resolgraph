@@ -1,5 +1,5 @@
 const nodeSize = 18;
-const clusters = ["Solar", "Andromeda"];
+const clusters = ["Solar", "Andromeda", "Black star", "Earth"];
 const nNodes = 20;
 const nodes = [];
 for (let i = 0; i < nNodes; i++) {
@@ -12,7 +12,7 @@ for (let i = 0; i < nNodes; i++) {
         label: (i + 1).toString(),
         color: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
         // Some domain data
-        domain: { partId: i + 1 },
+        domain: { partId: `PID-${Math.floor(Math.random() * 10 + 10)}` },
     };
 }
 

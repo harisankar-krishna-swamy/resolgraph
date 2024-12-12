@@ -1,17 +1,28 @@
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import SidePanel from "./SidePanel";
 import { v4 as uuidv4 } from "uuid";
 import { DirectedGraph } from "graphology";
 import { GraphDisplay } from "./GraphDisplay";
 import { data } from "./data";
+import NodeDetail from "./NodeDetail";
 
 export const GraphRoot = () => {
     const graph = useMemo(() => new DirectedGraph(), []);
+    const [nodeDetail, setNodeDetail] = useState(null);
 
     const nodeExists = useCallback(
         (label) => (graph.nodes().find((l) => l === label) ? true : false),
         [graph]
     );
+
+    const gatherNodeDetail = (label) => {
+        label
+            ? setNodeDetail({
+                  ...graph.getNodeAttributes(label),
+                  connections: graph.neighbors(label).length,
+              })
+            : setNodeDetail(null);
+    };
 
     const edgeExists = useCallback(
         (sourceLabel, targetLabel) =>
@@ -88,16 +99,28 @@ export const GraphRoot = () => {
     return (
         <div className="row m-3">
             <div className="col-8">
-                <GraphDisplay graph={graph} />
+                <GraphDisplay
+                    graph={graph}
+                    gatherNodeDetail={gatherNodeDetail}
+                />
             </div>
             <div className="col-4">
-                <SidePanel
-                    handleNewNode={onNewNode}
-                    handleNewEdge={onNewEdge}
-                    handleDropEdge={onDropEdge}
-                    handleDeleteNode={onDeleteNode}
-                    handleClear={onClear}
-                />
+                <div className="row">
+                    <div className="col">
+                        <SidePanel
+                            handleNewNode={onNewNode}
+                            handleNewEdge={onNewEdge}
+                            handleDropEdge={onDropEdge}
+                            handleDeleteNode={onDeleteNode}
+                            handleClear={onClear}
+                        />
+                    </div>
+                </div>
+                <div className="row mt-3">
+                    <div className="col">
+                        <NodeDetail nodeDetail={nodeDetail} />
+                    </div>
+                </div>
             </div>
         </div>
     );

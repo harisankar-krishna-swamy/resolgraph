@@ -14,7 +14,7 @@ const sigmaStyle = {
 };
 
 // Component that display the graph
-export const GraphDisplay = ({ graph }) => {
+export const GraphDisplay = ({ graph, gatherNodeDetail }) => {
     const sigmaSettings = useMemo(
         () => ({
             nodeProgramClasses: { image: NodeImageProgram },
@@ -42,7 +42,7 @@ export const GraphDisplay = ({ graph }) => {
                     <ControlsContainer position={"top-right"}>
                         <ZoomControl />
                     </ControlsContainer>
-                    <GraphEvents />
+                    <GraphEvents gatherNodeDetail={gatherNodeDetail} />
                 </SigmaContainer>
             </div>
         </div>

@@ -4,7 +4,7 @@ import { useSigma, useRegisterEvents, useSetSettings } from "@react-sigma/core";
 const NODE_FADE_COLOR = "#bbb";
 const EDGE_FADE_COLOR = "#eee";
 
-const GraphEvents = () => {
+const GraphEvents = ({ gatherNodeDetail }) => {
     const sigma = useSigma();
     const setSettings = useSetSettings();
     const [interestNode, setInterestNode] = useState(null);
@@ -19,9 +19,11 @@ const GraphEvents = () => {
             // node events
             enterNode: (event) => {
                 setInterestNode(event.node);
+                gatherNodeDetail(event.node);
             },
             leaveNode: (event) => {
                 setInterestNode(null);
+                gatherNodeDetail(null);
             },
             downNode: (e) => {
                 setDragNode(e.node);
@@ -55,7 +57,14 @@ const GraphEvents = () => {
             // edge events
             hoverEdge: (event) => console.log("clickEdge", event.edge),
         });
-    }, [registerEvents, interestNode, dragNode, graph, sigma]);
+    }, [
+        registerEvents,
+        interestNode,
+        dragNode,
+        graph,
+        sigma,
+        gatherNodeDetail,
+    ]);
 
     useEffect(() => {
         const hoveredColor =
