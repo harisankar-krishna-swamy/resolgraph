@@ -1,17 +1,20 @@
-import { useEffect, useMemo } from "react";
-import { SigmaContainer } from "@react-sigma/core";
-import { createNodeImageProgram } from "@sigma/node-image";
+import { useCallback, useEffect, useMemo } from "react";
+import {
+    SigmaContainer,
+    ControlsContainer,
+    ZoomControl,
+} from "@react-sigma/core";
+import { NodeImageProgram } from "@sigma/node-image";
 import SidePanel from "./SidePanel";
 import { v4 as uuidv4 } from "uuid";
-import "@react-sigma/core/lib/react-sigma.min.css";
 import Graph from "graphology";
 import { data } from "./data";
 import GraphEvents from "./GraphEvents";
+import "@react-sigma/core/lib/react-sigma.min.css";
 
 const sigmaStyle = {
     height: "800px",
     width: "1200px",
-    background: "lightgray",
 };
 
 // Component that display the graph
@@ -19,11 +22,7 @@ export const DisplayGraph = () => {
     const graph = useMemo(() => new Graph(), []);
     const sigmaSettings = useMemo(
         () => ({
-            nodeProgramClasses: {
-                image: createNodeImageProgram({
-                    size: { mode: "force", value: 256 },
-                }),
-            },
+            nodeProgramClasses: { image: NodeImageProgram },
             defaultNodeType: "image",
             defaultEdgeType: "arrow",
             labelDensity: 0.07,
@@ -34,55 +33,70 @@ export const DisplayGraph = () => {
         }),
         []
     );
+    const nodeExists = useCallback(
+        (label) => (graph.nodes().find((l) => l === label) ? true : false),
+        [graph]
+    );
+
+    const edgeExists = useCallback(
+        (sourceLabel, targetLabel) =>
+            graph.edges(sourceLabel, targetLabel).length ? true : false,
+        [graph]
+    );
+    const onNewNode = useCallback(
+        (node) => {
+            if (!node || !node.label || nodeExists(node.label)) return;
+
+            graph.addNode(node.label, {
+                key: uuidv4(),
+                x: Math.random() * 10 + 50,
+                y: Math.random() * 10 + 50,
+                size: 15,
+                color: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
+                // override with input data
+                ...node,
+            });
+        },
+        [graph, nodeExists]
+    );
+
+    const onNewEdge = useCallback(
+        (source, target, edgeAttrs = {}) => {
+            if (
+                !nodeExists(source) ||
+                !nodeExists(target) ||
+                edgeExists(source, target)
+            )
+                return;
+
+            graph.addEdge(source, target, {
+                size: 2,
+                color: "black",
+                // Override with inputs
+                ...edgeAttrs,
+            });
+        },
+        [graph, nodeExists, edgeExists]
+    );
 
     useEffect(() => {
         graph.clear();
         const { nodes, edges } = data;
         nodes.forEach((node) => {
-            graph.addNode(node.key, { ...node, hightlighted: true });
+            onNewNode(node);
         });
         edges.forEach(([source, target]) => {
-            graph.addEdge(source, target, {
+            onNewEdge(source, target, {
                 size: 2,
                 color: "black",
             });
         });
-    }, [graph]);
-
-    const nodeExists = (label) =>
-        graph.nodes().find((l) => l === label) ? true : false;
-
-    const edgeExists = (sourceLabel, targetLabel) =>
-        graph.edges(sourceLabel, targetLabel).length ? true : false;
+    }, [graph, onNewNode, onNewEdge]);
 
     const onDeleteNode = (nodeLabel) => {
         if (!nodeLabel || !nodeExists(nodeLabel)) return;
 
         graph.dropNode(nodeLabel);
-    };
-
-    const onNewNode = (nodeLabel) => {
-        if (nodeExists(nodeLabel)) return;
-
-        graph.addNode(nodeLabel, {
-            key: uuidv4(),
-            x: Math.random() * 10 + 50,
-            y: Math.random() * 10 + 50,
-            size: 15,
-            label: nodeLabel,
-            color: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
-        });
-    };
-
-    const onNewEdge = (source, target) => {
-        if (
-            !nodeExists(source) ||
-            !nodeExists(target) ||
-            edgeExists(source, target)
-        )
-            return;
-
-        graph.addEdge(source, target, { size: 2, color: "black" });
     };
 
     const onDropEdge = (source, target) => {
@@ -103,14 +117,23 @@ export const DisplayGraph = () => {
     return (
         <div className="row m-3">
             <div className="col-8">
-                <SigmaContainer
-                    graph={graph}
-                    style={sigmaStyle}
-                    settings={sigmaSettings}
-                    className="react-sigma"
-                >
-                    <GraphEvents />
-                </SigmaContainer>
+                <div className="card">
+                    <div className="card-header">Graph</div>
+                    <div className="card-body">
+                        <SigmaContainer
+                            graph={graph}
+                            style={sigmaStyle}
+                            settings={sigmaSettings}
+                            className="react-sigma"
+                        >
+                            <ControlsContainer position={"bottom-right"}>
+                                <ZoomControl />
+                            </ControlsContainer>
+
+                            <GraphEvents />
+                        </SigmaContainer>
+                    </div>
+                </div>
             </div>
             <div className="col-4">
                 <SidePanel

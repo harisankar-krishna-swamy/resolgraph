@@ -17,17 +17,21 @@ const GraphEvents = () => {
         // Register the events
         registerEvents({
             // node events
-            clickNode: (event) => console.log("clickNode", event.node),
+            clickNode: (event) => {
+                hoverNode === event.node
+                    ? setHoverNode("")
+                    : setHoverNode(event.node);
+            },
             enterNode: (event) => {
-                setHoverNode(event.node);
+                //setHoverNode(event.node);
             },
             leaveNode: (event) => {
-                setHoverNode(null);
+                //setHoverNode(null);
             },
             // edge events
             clickEdge: (event) => console.log("clickEdge", event.edge),
         });
-    }, [registerEvents]);
+    }, [registerEvents, hoverNode]);
 
     useEffect(() => {
         const hoveredColor =

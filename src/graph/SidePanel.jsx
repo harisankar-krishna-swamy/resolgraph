@@ -11,6 +11,12 @@ const SidePanel = ({
     const [sourceLabel, setSourceLabel] = useState("");
     const [targetLabel, setTargetLabel] = useState("");
 
+    const clearUI = () => {
+        setNodeLabel("");
+        setSourceLabel("");
+        setTargetLabel("");
+    };
+
     return (
         <div className="card">
             <div className="card-header">Graph options</div>
@@ -28,7 +34,10 @@ const SidePanel = ({
                     </div>
                     <div className="col-3">
                         <button
-                            onClick={() => handleNewNode(nodeLabel)}
+                            onClick={() => {
+                                handleNewNode({ label: nodeLabel });
+                                clearUI();
+                            }}
                             className="btn btn-md btn-primary"
                         >
                             Add Node
@@ -36,7 +45,10 @@ const SidePanel = ({
                     </div>
                     <div className="col-3">
                         <button
-                            onClick={() => handleDeleteNode(nodeLabel)}
+                            onClick={() => {
+                                handleDeleteNode(nodeLabel);
+                                clearUI();
+                            }}
                             className="btn btn-md btn-warning"
                         >
                             Delete Node
@@ -69,9 +81,10 @@ const SidePanel = ({
                         <button
                             type="submit"
                             className="btn btn-md btn-primary"
-                            onClick={() =>
-                                handleNewEdge(sourceLabel, targetLabel)
-                            }
+                            onClick={() => {
+                                handleNewEdge(sourceLabel, targetLabel);
+                                clearUI();
+                            }}
                         >
                             Add Edge
                         </button>
@@ -80,9 +93,10 @@ const SidePanel = ({
                         <button
                             type="submit"
                             className="btn btn-md btn-warning"
-                            onClick={() =>
-                                handleDropEdge(sourceLabel, targetLabel)
-                            }
+                            onClick={() => {
+                                handleDropEdge(sourceLabel, targetLabel);
+                                clearUI();
+                            }}
                         >
                             Drop Edge
                         </button>
