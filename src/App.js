@@ -1,11 +1,11 @@
 import "./App.css";
-import { DisplayGraph } from "./graph/DisplayGraph";
+import { GraphRoot } from "./graph/GraphRoot ";
 
 function App() {
     return (
         <div className="App">
             <div className="container-fluid">
-                <DisplayGraph />
+                <GraphRoot />
             </div>
         </div>
     );

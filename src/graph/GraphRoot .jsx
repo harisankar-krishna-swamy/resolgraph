@@ -1,38 +1,13 @@
 import { useCallback, useEffect, useMemo } from "react";
-import {
-    SigmaContainer,
-    ControlsContainer,
-    ZoomControl,
-} from "@react-sigma/core";
-import { NodeImageProgram } from "@sigma/node-image";
 import SidePanel from "./SidePanel";
 import { v4 as uuidv4 } from "uuid";
 import { DirectedGraph } from "graphology";
+import { GraphDisplay } from "./GraphDisplay";
 import { data } from "./data";
-import GraphEvents from "./GraphEvents";
-import "@react-sigma/core/lib/react-sigma.min.css";
 
-const sigmaStyle = {
-    height: "800px",
-    width: "1200px",
-};
-
-// Component that display the graph
-export const DisplayGraph = () => {
+export const GraphRoot = () => {
     const graph = useMemo(() => new DirectedGraph(), []);
-    const sigmaSettings = useMemo(
-        () => ({
-            nodeProgramClasses: { image: NodeImageProgram },
-            defaultNodeType: "image",
-            defaultEdgeType: "arrow",
-            labelDensity: 0.07,
-            labelGridCellSize: 60,
-            labelRenderedSizeThreshold: 15,
-            labelFont: "Lato, sans-serif",
-            zIndex: true,
-        }),
-        []
-    );
+
     const nodeExists = useCallback(
         (label) => (graph.nodes().find((l) => l === label) ? true : false),
         [graph]
@@ -40,7 +15,7 @@ export const DisplayGraph = () => {
 
     const edgeExists = useCallback(
         (sourceLabel, targetLabel) =>
-            graph.edges(sourceLabel, targetLabel).length ? true : false,
+            graph.inEdges(targetLabel, sourceLabel).length ? true : false,
         [graph]
     );
     const onNewNode = useCallback(
@@ -68,10 +43,9 @@ export const DisplayGraph = () => {
                 edgeExists(source, target)
             )
                 return;
-
             graph.addEdge(source, target, {
-                size: 2,
-                color: "black",
+                size: 3,
+                color: "darkgrey",
                 // Override with inputs
                 ...edgeAttrs,
             });
@@ -86,10 +60,7 @@ export const DisplayGraph = () => {
             onNewNode(node);
         });
         edges.forEach(([source, target]) => {
-            onNewEdge(source, target, {
-                size: 2,
-                color: "black",
-            });
+            onNewEdge(source, target);
         });
     }, [graph, onNewNode, onNewEdge]);
 
@@ -106,7 +77,7 @@ export const DisplayGraph = () => {
             !edgeExists(source, target)
         )
             return;
-
+        console.log(edgeExists(source, target));
         graph.dropEdge(source, target);
     };
 
@@ -117,23 +88,7 @@ export const DisplayGraph = () => {
     return (
         <div className="row m-3">
             <div className="col-8">
-                <div className="card">
-                    <div className="card-header">Graph</div>
-                    <div className="card-body">
-                        <SigmaContainer
-                            graph={graph}
-                            style={sigmaStyle}
-                            settings={sigmaSettings}
-                            className="react-sigma"
-                        >
-                            <ControlsContainer position={"bottom-right"}>
-                                <ZoomControl />
-                            </ControlsContainer>
-
-                            <GraphEvents />
-                        </SigmaContainer>
-                    </div>
-                </div>
+                <GraphDisplay graph={graph} />
             </div>
             <div className="col-4">
                 <SidePanel

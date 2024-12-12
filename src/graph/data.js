@@ -1,7 +1,8 @@
 const nodeSize = 18;
 const clusters = ["Solar", "Andromeda"];
+const nNodes = 20;
 const nodes = [];
-for (let i = 0; i < 5; i++) {
+for (let i = 0; i < nNodes; i++) {
     nodes[i] = {
         key: (i + 1).toString(),
         cluster: clusters[Math.floor(Math.random() * clusters.length)],
@@ -15,15 +16,13 @@ for (let i = 0; i < 5; i++) {
     };
 }
 
-const edges = [
-    ["1", "2"],
-    ["2", "3"],
-    ["4", "2"],
-    ["5", "2"],
-    ["1", "5"],
-];
+const createEdges = () => {
+    const el = [];
+    for (let i = 1; i < nNodes; i++) el.push(["1", (i + 1).toString()]);
+    return el;
+};
 
 export const data = {
     nodes,
-    edges,
+    edges: createEdges(),
 };
