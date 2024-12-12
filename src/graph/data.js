@@ -10,6 +10,8 @@ for (let i = 0; i < 5; i++) {
         size: nodeSize,
         label: (i + 1).toString(),
         color: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
+        // Some domain data
+        domain: { partId: i + 1 },
     };
 }
 

@@ -7,7 +7,7 @@ import {
 import { NodeImageProgram } from "@sigma/node-image";
 import SidePanel from "./SidePanel";
 import { v4 as uuidv4 } from "uuid";
-import Graph from "graphology";
+import { DirectedGraph } from "graphology";
 import { data } from "./data";
 import GraphEvents from "./GraphEvents";
 import "@react-sigma/core/lib/react-sigma.min.css";
@@ -19,7 +19,7 @@ const sigmaStyle = {
 
 // Component that display the graph
 export const DisplayGraph = () => {
-    const graph = useMemo(() => new Graph(), []);
+    const graph = useMemo(() => new DirectedGraph(), []);
     const sigmaSettings = useMemo(
         () => ({
             nodeProgramClasses: { image: NodeImageProgram },

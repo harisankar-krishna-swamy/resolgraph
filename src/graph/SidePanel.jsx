@@ -16,7 +16,6 @@ const SidePanel = ({
         setSourceLabel("");
         setTargetLabel("");
     };
-
     return (
         <div className="card">
             <div className="card-header">Graph options</div>
