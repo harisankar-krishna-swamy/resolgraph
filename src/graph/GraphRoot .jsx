@@ -3,7 +3,7 @@ import SidePanel from "./SidePanel";
 import { v4 as uuidv4 } from "uuid";
 import { DirectedGraph } from "graphology";
 import { GraphDisplay } from "./GraphDisplay";
-import { data } from "./data";
+import { data } from "./data/solar/solarData";
 import NodeDetail from "./NodeDetail";
 
 export const GraphRoot = () => {
