@@ -19,10 +19,14 @@ const NodeDetail = ({ nodeDetail }) => {
                             <th scope="col">Connections</th>
                             <td>{nodeDetail?.connections}</td>
                         </tr>
-                        <tr>
-                            <th scope="col">Part Id</th>
-                            <td>{nodeDetail?.domain?.partId}</td>
-                        </tr>
+                        {nodeDetail &&
+                            nodeDetail.domain &&
+                            Object.keys(nodeDetail.domain).map((key, index) => (
+                                <tr>
+                                    <th scope="col">{key}</th>
+                                    <td>{nodeDetail?.domain[[key]]}</td>
+                                </tr>
+                            ))}
                     </tbody>
                 </table>
             </div>

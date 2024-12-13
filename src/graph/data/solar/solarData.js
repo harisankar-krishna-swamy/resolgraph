@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 import { planetsNSatellites } from "./planets-satellites";
+import { planets } from "./planets";
 const nodeSize = 18;
 const makeNodeAttrs = (x = 80, y = 80, delta = 110) => ({
     key: uuidv4(),
@@ -15,81 +16,6 @@ const makeNodeAttrs = (x = 80, y = 80, delta = 110) => ({
     color: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
 });
 
-const planets = [
-    {
-        label: "Mercury",
-        size: 15,
-        color: "violet",
-        x: 450,
-        y: 590,
-        delta: 0,
-    },
-    {
-        label: "Venus",
-        size: 20,
-        color: "purple",
-        x: 550,
-        y: 600,
-        delta: 0,
-    },
-    {
-        label: "Earth",
-        size: 20,
-        color: "blue",
-        x: 650,
-        y: 600,
-        delta: 50,
-    },
-    {
-        label: "Mars",
-        size: 20,
-        color: "red",
-        x: 280,
-        y: 480,
-        delta: 80,
-    },
-    {
-        label: "Jupiter",
-        size: 40,
-        color: "yellow",
-        x: 200,
-        y: 280,
-        delta: 150,
-    },
-    {
-        label: "Saturn",
-        size: 30,
-        color: "black",
-        x: 540,
-        y: 150,
-        delta: 150,
-    },
-    {
-        label: "Uranus",
-        size: 20,
-        color: "magenta",
-        x: 800,
-        y: 300,
-        delta: 105,
-    },
-    {
-        label: "Neptune",
-        size: 20,
-        color: "green",
-        x: 950,
-        y: 510,
-        delta: 120,
-    },
-    {
-        label: "Pluto",
-        size: 10,
-        color: "blue",
-        x: 880,
-        y: 50,
-        delta: 70,
-    },
-];
-
 const nodes = [
     {
         ...makeNodeAttrs(),
@@ -100,7 +26,7 @@ const nodes = [
         x: 500,
         y: 500,
     },
-    ...planets.map((p) => ({ ...makeNodeAttrs(), ...p })),
+    ...planets.map((p) => ({ ...makeNodeAttrs(), ...p, cluster: "Sun" })),
 
     ...planetsNSatellites.map(([planet, satellite]) => ({
         ...makeNodeAttrs(
