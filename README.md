@@ -1,6 +1,6 @@
 ## ReSolGraph - React Solar System Graph
 
-Using Sigma, Graphology and React-Sigma
+A quick graphing of solar system data using Sigma, Graphology and React-Sigma
 
 ## Functionalities
 
