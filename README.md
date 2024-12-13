@@ -16,3 +16,7 @@ Using Sigma, Graphology and React-Sigma
 ![Alt text](public/screens/solar3.png)
 
 ![Alt text](public/screens/solar4.png)
+
+## Quick run
+$ npm i  
+$ npm start
