@@ -41,8 +41,6 @@ const nodes = [
     })),
 ];
 
-console.log(nodes);
-
 const edges = [
     ...planets.map((p) => ["Sun", p.label]),
     ...planetsNSatellites.map(([planet, satellite]) => [planet, satellite]),

@@ -31,7 +31,7 @@ export const GraphDisplay = ({ graph, gatherNodeDetail }) => {
 
     return (
         <div className="card">
-            <div className="card-header">Graph</div>
+            <div className="card-header">Connected data</div>
             <div className="card-body">
                 <SigmaContainer
                     graph={graph}

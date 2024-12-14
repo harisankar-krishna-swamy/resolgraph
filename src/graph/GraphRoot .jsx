@@ -3,8 +3,8 @@ import SidePanel from "./SidePanel";
 import { v4 as uuidv4 } from "uuid";
 import { DirectedGraph } from "graphology";
 import { GraphDisplay } from "./GraphDisplay";
-import { data } from "./data/solar/solarData";
 import NodeDetail from "./NodeDetail";
+import { data } from "./data/solar/solarData";
 
 export const GraphRoot = () => {
     const graph = useMemo(() => new DirectedGraph(), []);
@@ -20,6 +20,8 @@ export const GraphRoot = () => {
             ? setNodeDetail({
                   ...graph.getNodeAttributes(label),
                   connections: graph.neighbors(label).length,
+                  ingress: graph.inDegree(label),
+                  outgress: graph.outDegree(label),
               })
             : setNodeDetail(null);
     };

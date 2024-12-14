@@ -18,7 +18,7 @@ const SidePanel = ({
     };
     return (
         <div className="card">
-            <div className="card-header">Graph options</div>
+            <div className="card-header">Operations</div>
             <div className="card-body">
                 <div className="row">
                     <div className="col-6">
